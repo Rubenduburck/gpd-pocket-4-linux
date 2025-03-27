@@ -1,0 +1,10 @@
+[Unit]
+Description=User-level auto-rotate daemon	
+
+[Service]
+ExecStart=/usr/local/bin/screen-auto-rotate
+Restart=on-failure
+Type=simple
+
+[Install]
+WantedBy=default.target
