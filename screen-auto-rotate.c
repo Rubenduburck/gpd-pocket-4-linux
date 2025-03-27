@@ -16,8 +16,6 @@ char command[DATA_SIZE*4];
 
 char *ROT[]   = {"normal", 				"inverted", 			"right", 				"left"};
 char *COOR_TOUCH[]  = {"1 0 0 0 1 0 0 0 1",	"-1 0 1 0 -1 1 0 0 1", 	"0 1 0 -1 0 1 0 0 1", 	"0 -1 1 1 0 0 0 0 1"};
-char *COOR_STYLE[]  = {"1 0 0 0 1 0 0 0 1",	"-1 0 1 0 -1 1 0 0 1", 	"0 1 0 -1 0 1 0 0 1", 	"0 -1 1 1 0 0 0 0 1"};
-// char *TOUCH[] = {"enable", 				"disable", 				"disable", 				"disable"};
 
 double accel_y = 0.0,
 #if N_STATE == 4
@@ -30,11 +28,11 @@ int current_state = 0;
 int rotation_changed(){
 	int state = 0;
 
-	if(accel_y < -accel_g) state = 0;
-	else if(accel_y > accel_g) state = 1;
-#if N_STATE == 4
-	else if(accel_x > accel_g) state = 2;
-	else if(accel_x < -accel_g) state = 3;
+	if(accel_y < -accel_g) state = 3;
+	else if(accel_y > accel_g) state = 0;
+#if N_STATE == 3
+	else if(accel_x > accel_g) state = 1;
+	else if(accel_x < -accel_g) state = 2;
 #endif
 
 	if(current_state!=state){
@@ -59,16 +57,10 @@ FILE* bdopen(char const *fname, char leave_open){
 }
 
 void rotate_screen(){
-	sprintf(command, "xrandr --output DSI-1 --rotate %s", ROT[current_state]);
+	sprintf(command, "xrandr --output eDP --rotate %s", ROT[current_state]);
 	printf("%s \n", command);
 	system(command);
-	sprintf(command, "xinput set-prop \"%s\" \"Coordinate Transformation Matrix\" %s", "16", COOR_TOUCH[current_state]);
-	printf("%s \n", command);
-	system(command);
-	sprintf(command, "xinput set-prop \"%s\" \"Coordinate Transformation Matrix\" %s", "21", COOR_STYLE[current_state]);
-	printf("%s \n", command);
-	system(command);
-	sprintf(command, "xinput set-prop \"%s\" \"Coordinate Transformation Matrix\" %s", "22", COOR_STYLE[current_state]);
+	sprintf(command, "xinput set-prop \"%s\" \"Coordinate Transformation Matrix\" %s", "13", COOR_TOUCH[current_state]);
 	printf("%s \n", command);
 	system(command);
 }

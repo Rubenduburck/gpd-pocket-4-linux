@@ -11,9 +11,9 @@
 #### fb
 ```
 └─# nano /etc/default/grub
-GRUB_CMDLINE_LINUX_DEFAULT="quiet fbcon=rotate:1"
+GRUB_CMDLINE_LINUX_DEFAULT="quiet fbcon=rotate:1 video=eDP:panel_orientation=right_side_up"
 GRUB_CMDLINE_LINUX="fbcon=rotate:1"
-GRUB_GFXMODE=1200x1920x32
+GRUB_GFXMODE=1600x2560x32
 └─# update-grub
 ```
 #### lightdm
@@ -28,7 +28,8 @@ display-setup-script=xrandr -o right
 └─# nano /etc/X11/xorg.conf.d/99-touchsreen.conf
 Section "InputClass"
   Identifier    "calibration"
-  MatchProduct  "GXTP7380"
+  Driver        "wacom"
+  MatchProduct  "NVTK0603"
   Option        "TransformationMatrix" "0 1 0 -1 0 1 0 0 1"
 EndSection
 
